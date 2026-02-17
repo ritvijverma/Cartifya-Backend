@@ -42,7 +42,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(express.static(path.join(__dirname, "client/dist")));
+// app.use(express.static(path.join(__dirname, "client/dist")));
 
 
 // API routes
@@ -57,9 +57,9 @@ app.use("/api/v1/product", productRoute);
 // React build serve
 
 
-app.use(function (req, res) {
-  res.sendFile(path.join(__dirname, './client/dist/index.html'))
-})
+app.get("/", (req, res) => {
+  res.send("<h1>Welcome to Cartifya Backend API</h1>");
+});
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
