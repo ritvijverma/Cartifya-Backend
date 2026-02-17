@@ -1,0 +1,35 @@
+services:
+  # Web Service for Node.js Backend
+  - type: web
+    name: cartifya-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: cartifya-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: cartifya-redis
+          property: port
+      # Note: Render Redis on free tier is internal-only and auto-authenticated typically,
+      # but if a password is required, you can map it like this:
+      # - key: REDIS_PASSWORD
+      #   fromService:
+      #     type: redis
+      #     name: cartifya-redis
+      #     property: password
+      # Since we are using free tier, we will rely on internal networking where possible.
+
+  # Redis Service
+  - type: redis
+    name: cartifya-redis
+    plan: free
+    ipAllowList: [] # Access allowed only from other services in the same environment

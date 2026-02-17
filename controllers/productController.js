@@ -1,0 +1,286 @@
+import productModel from "../models/product.model.js";
+import fs from "fs";
+import slugify from "slugify";
+
+export const createProductController = async (req, res) => {
+  try {
+    const { name, slug, description, price, category, quantity, shipping } =
+      req.fields;
+    const { photo } = req.files;
+    //validation is reqired
+    switch (true) {
+      case !name:
+        return res.status(500).send({ error: "Name is Required" });
+      case !description:
+        return res.status(500).send({ error: "Description is Required" });
+      case !price:
+        return res.status(500).send({ error: "Price is Required" });
+      case !category:
+        return res.status(500).send({ error: "Category is Required" });
+      case !quantity:
+        return res.status(500).send({ error: "Quantity is Required" });
+      case photo && photo.size > 1000000:
+        return res
+          .status(500)
+          .send({ error: "Photo is Required & should be less than 1mb" });
+    }
+    const products = new productModel({ ...req.fields, slug: slugify(name) });
+    if (photo) {
+      products.photo.data = fs.readFileSync(photo.path);
+      products.photo.contentType = photo.type;
+    }
+    await products.save();
+    res.status(201).send({
+      success: true,
+      message: "Product Created Successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error While Creating Product",
+    });
+  }
+};
+
+// getProductController
+
+export const getProductController = async (req, res) => {
+  try {
+    const products = await productModel
+      .find({})
+      .populate("category")
+      .select("-photo")
+      .limit(12)
+      .sort({ createdAt: -1 });
+    res.status(200).send({
+      success: true,
+      countTotal: products.length,
+      message: "ALLProducts",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: error.message,
+    });
+  }
+};
+
+//getSingleProductController
+export const getSingleProductController = async (req, res) => {
+  try {
+    const product = await productModel
+      .findOne({ slug: req.params.slug })
+      .select("-photo")
+      .populate("category");
+    res.status(200).send({
+      success: true,
+      message: "Single Product Fetched Successfully",
+      product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error While Getting Single Product",
+    });
+  }
+};
+
+///getProductPhotoController
+
+export const getProductPhotoController = async (req, res) => {
+  try {
+    const product = await productModel.findById(req.params.pid).select("photo");
+    if (product.photo.data) {
+      res.set("Content-type", product.photo.contentType);
+      res.status(200).send(product.photo.data);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error While Getting Product Photo",
+    });
+  }
+};
+
+///delete product
+
+export const deleteProductController = async (req, res) => {
+  try {
+    await productModel.findByIdAndDelete(req.params.pid).select("-photo");
+    res.status(200).send({
+      success: true,
+      message: "Product Deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error While Deleting Product ",
+    });
+  }
+};
+
+//updateProductController
+
+export const updateProductController = async (req, res) => {
+  try {
+    const { name, slug, description, price, category, quantity, shipping } =
+      req.fields;
+    const { photo } = req.files;
+    //validation is reqired
+    switch (true) {
+      case !name:
+        return res.status(500).send({ error: "Name is Required" });
+      case !description:
+        return res.status(500).send({ error: "Description is Required" });
+      case !price:
+        return res.status(500).send({ error: "Price is Required" });
+      case !category:
+        return res.status(500).send({ error: "Category is Required" });
+      case !quantity:
+        return res.status(500).send({ error: "Quantity is Required" });
+      case photo && photo.size > 1000000:
+        return res
+          .status(500)
+          .send({ error: "Photo is Required & should be less than 1mb" });
+    }
+    const products = await productModel.findByIdAndUpdate(
+      req.params.pid,
+      { ...req.fields, slug: slugify(name) },
+      { new: true },
+    );
+
+    if (photo) {
+      products.photo.data = fs.readFileSync(photo.path);
+      products.photo.contentType = photo.type;
+    }
+    await products.save();
+    res.status(201).send({
+      success: true,
+      message: "Product Updated Created Successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error While Updating Product ",
+    });
+  }
+};
+
+//productFiltersController
+
+export const productFiltersController = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    const products = await productModel.find(args);
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error While Filterings Product",
+      error,
+    });
+  }
+};
+
+//product count controller
+
+export const productCountController = async (req, res) => {
+  try {
+    const total = await productModel.find({}).estimatedDocumentCount();
+    res.status(200).send({
+        success: true, 
+    total,
+   })
+  } catch (error) {
+    (console.log(error),
+      res.status(400).send({
+        success: false,
+        message: "Error While Counting Product",
+        error,
+      }));
+  }
+};
+
+//product list controller for pagination
+
+export const productListController = async (req, res) =>{
+    try{
+        let perPage = 4;
+        let page = req.params.page ? parseInt(req.params.page) : 1;
+        const products = await productModel.find({}).select("-photo").skip((page - 1)*perPage).limit(perPage).sort({createdAt: -1})
+        res.status(200).send({
+             success: true,
+        products,
+        })
+       
+    }catch(error){
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error While Getting Product List",
+            error,
+        })
+    }
+}
+
+
+//search product
+
+export const searchController = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+
+    if (!keyword) {
+      return res.status(400).send({
+        success: false,
+        message: "Keyword is required"
+      });
+    }
+
+    const product = await productModel
+      .find({
+        $or: [
+          { name: { $regex: keyword, $options: "i" } },
+          { description: { $regex: keyword, $options: "i" } }
+        ]
+      })
+      .select("-photo")        // 🔥 VERY IMPORTANT
+      .populate("category");   // optional but recommended
+
+    res.status(200).send({
+      success: true,
+      count: product.length,
+      product,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error In Search Product API",
+      error,
+    });
+  }
+};
