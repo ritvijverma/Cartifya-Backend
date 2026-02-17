@@ -1,125 +1,126 @@
-# Cartifya E-commerce Full Stack Application
+# 🛒 Cartifya — Full Stack E-commerce Application
 
-A robust full-stack e-commerce application built with the MERN stack (MongoDB, Express, React, Node.js). This application features a comprehensive backend API, a responsive frontend interface, and key e-commerce functionalities like user authentication, product management, and category organization.
+**Cartifya** is a production-ready e-commerce platform built using the **MERN Stack** (MongoDB, Express, React, Node.js) and **Redis**. It features secure authentication, role-based access, and a modern user interface.
 
-## Tech Stack
+---
 
-### Backend
-- **Node.js**: JavaScript runtime environment.
-- **Express**: Fast, unopinionated, minimalist web framework for Node.js.
-- **MongoDB**: NoSQL database for flexible data storage.
-- **Mongoose**: Elegant MongoDB object modeling for Node.js.
-- **JWT (JSON Web Token)**: For secure user authentication and authorization.
-- **Bcrypt**: For hashing passwords to ensure security.
-- **Dotenv**: Module to load environment variables.
-- **Morgan**: HTTP request logger middleware for Node.js.
-- **Slugify**: For creating URL-friendly slugs.
-- **Swagger UI Express / Swagger JSDoc**: For API documentation.
+## 🏗️ Project Status: In Development 🛠️
 
-### Frontend
-- **React**: JavaScript library for building user interfaces.
-- **Vite**: Next Generation Frontend Tooling for fast development.
-- **Material UI (@mui/material)**: React UI component library.
-- **Tailwind CSS**: Utility-first CSS framework.
-- **Axios**: Promise-based HTTP client for the browser.
-- **React Router DOM**: Declarative routing for React web applications.
-- **React Toastify**: For displaying notifications.
-- **React Icons**: Include popular icons in your React projects.
-- **React Hook Form**: Performant, flexible and extensible forms with easy-to-use validation.
+> **Important Note:** The **Payment Integration (Razorpay)** and **Full Cart System** are currently in **Development Mode**. I am actively working on these features to make them fully functional for production.
 
-## Features
+---
 
-- **User Authentication**: Secure Registration, Login, and Forgot Password securely using JWT and Bcrypt.
-- **Role-Based Access Control**: Separate dashboards and access levels for Users and Admins.
-- **Product Management**: Ability to Create, Read, Update, and Delete products.
-- **Category Management**: Organize products into categories.
-- **Search & Filter**: Find products easily.
-- **Responsive Design**: Mobile-friendly interface powered by Tailwind CSS and Material UI.
-- **API Documentation**: Interactive API documentation available via Swagger.
+## ✨ Key Features
 
-## proper API Documentation
+- 🔐 **Secure Auth:** JWT-based login and registration with Redis token blacklisting for extra security.
+- 👤 **Role-Based Access:** Separate dashboards and permissions for **Admins** and **Users**.
+- 📦 **Product Management:** Full CRUD (Create, Read, Update, Delete) functionality for products and categories (Admin only).
+- 🛒 **Cart System (Dev Mode):** Users can add and remove products from their cart.
+- 💳 **Payment Gateway (Dev Mode):** Integrated with Razorpay using Test Mode keys.
+- ⚡ **Performance:** Uses Redis for fast session management and security.
+- 📱 **Responsive UI:** Fully optimized for mobile, tablet, and desktop screens.
 
-The application includes Swagger UI for easy API exploration and testing.
-Once the server is running, visit:
-**`http://localhost:8080/api-doc`**
+---
+## 🔗 Related Repository
 
-## Getting Started
+Check out the backend code for this project here:  
+👉 https://github.com/ritvijverma/Cartifya-Frontend
 
-Follow these instructions to get a copy of the project up and running on your local machine.
+---
 
-### Prerequisites
+## 🚀 Tech Stack
 
-- **Node.js**: Ensure you have Node.js installed.
-- **MongoDB**: You need a MongoDB connection string (local or Atlas).
+### 🔹 Backend
+- Node.js
+- Express.js
+- MongoDB (Mongoose)
+- Redis (ioredis)
+- JWT Authentication
 
-### Installation
+### 🔹 Frontend
+- React.js
+- Vite
+- Redux Toolkit
+- Tailwind CSS
+- Ant Design
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd <project-directory>
-    ```
+### 🔹 Payment Gateway
+- Razorpay
 
-2.  **Install Backend Dependencies:**
-    ```bash
-    npm install
-    ```
+## ⚙️ Getting Started
 
-3.  **Install Frontend Dependencies:**
-    ```bash
-    cd client
-    npm install
-    cd ..
-    ```
+Follow these steps to set up the project on your local machine.
 
-### Environment Variables
+### ✅ Prerequisites
+* **Node.js** (v18 or higher)
+* **MongoDB** (Atlas Cloud or Local)
+* **Redis** (Installed locally or via Redis Cloud)
+* **Razorpay Account** (To get your Test API Keys)
 
-Create a `.env` file in the root directory and add the following configuration:
+### 📦 Installation
 
-```env
-PORT=8080
-MONGO_URL=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-```
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/your-username/cartifya.git](https://github.com/your-username/cartifya.git)
+   cd cartifya ```
 
-### Running the Application
+2. Install Dependencies
+   ``` basg
+       npm install    ```
+   
+3.Environment Variables
 
-You can run the application using the following commands from the root directory:
+   ```
+MONGO_URI=your_mongo_connection_string
+PORT=8000
+JWT_SECRET=your_jwt_secret
+REDIS_URL=redis://localhost:6379
+RAZORPAY_KEY_ID=your_razorpay_key
+RAZORPAY_KEY_SECRET=your_razorpay_secret
+ ```
+### Run in Development Mode
 
--   **Run both Server and Client concurrently (Recommended for Dev):**
-    ```bash
-    npm run dev
-    ```
+ - To start backend and frontend together:
 
--   **Run Server only:**
-    ```bash
-    npm run server
-    ```
+``` npm run dev ```
 
--   **Run Client only:**
-    ```bash
-    npm run client
-    ```
-    *Note: The client runs on Vite.*
+ - Backend runs on:
 
--   **Build for Production:**
-    ```bash
-    npm run build
-    ```
-    This will install dependencies for both client and server and build the React client.
+```http://localhost:8000```
 
-## Scripts
 
--   `npm start`: Runs the server (production mode).
--   `npm run server`: Runs the server with Nodemon (development mode).
--   `npm run client`: Runs the data client.
--   `npm run dev`: Runs both server and client concurrently.
--   `npm run build`: Installs all dependencies and builds the client for production.
+- Frontend runs on:
 
-## Author
+```http://localhost:5173```
 
-**Ritvij Verma**
 
-## License
+---
 
-This project is licensed under the ISC License.
+## 👨‍💻 About Me
+
+Hi, I'm **Ritvij Verma**, a B.Tech (CSE, 2025) graduate and Full Stack Developer passionate about building scalable and user-friendly web applications.
+
+I enjoy working on backend architecture, performance optimization, and real-world problem solving using modern technologies.
+
+---
+
+## 📬 Contact Me
+
+- 📧 Email: your-email@example.com  
+- 💼 LinkedIn: https://linkedin.com/in/your-profile  
+- 🖥 GitHub: https://github.com/your-username  
+
+---
+
+## 💡 Feedback & Contributions
+
+Your feedback, suggestions, and contributions are always welcome!
+
+If you find any bugs or have ideas for improvements:
+- Open an issue  
+- Submit a pull request  
+- Or connect with me directly  
+
+⭐ If you like this project, consider giving it a star!
+
+
